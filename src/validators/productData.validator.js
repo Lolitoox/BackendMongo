@@ -1,4 +1,5 @@
 import { body, validationResult } from "express-validator";
+
 export const productDataValidator = [
   body("title")
     .isString()
@@ -45,18 +46,20 @@ export const productDataValidator = [
     .withMessage("La categoría es obligatorio")
     .isLength({ min: 3 })
     .withMessage("Tiene que tener al menos 3 caracteres"),
-    
     (req, res, next) => {
-      const errors = validationResult(req); // Validamos lo que recibimos por request
+      const errors = validationResult(req);
+      // Verificar si hay algún error
       if (!errors.isEmpty()) {
+        // Formateo de la respuesta de los errores
         const formatErrors = errors.array().map( e => {
           return { msg: e.msg, data: e.path }
         } )
   
+        // Si el error no viene vacío
         return res.status(400).json({ status: "error", errors: formatErrors });
       }
   
-      // Si no hay errores se continúa.
+      // Si no hay errores continúa
       next();
     },
 ];

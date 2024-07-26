@@ -2,9 +2,10 @@ import passport from "passport";
 import local from "passport-local";
 import google from "passport-google-oauth20";
 import jwt from "passport-jwt";
-import envs from "./env.config.js"
+import envs from "./env.config.js";
 import { createHash, isValidPassword } from "../utils/hashPassword.js";
-import userDao from "../dao/mongoDao/user.dao.js";
+import userRepository from "../persistences/mongo/repositories/user.repository.js";
+import cartsRepository from "../persistences/mongo/repositories/carts.repository.js";
 
 const LocalStrategy = local.Strategy;
 const GoogleStrategy = google.Strategy;
@@ -22,16 +23,20 @@ const cookieExtracto = (req) => {
 };
 
 const initializePassport = () => {
-  // Esta función inicializa las estrategias que configuremos
+  // Esta función inicializa las estrategias
   passport.use(
     "register",
     new LocalStrategy(
       { passReqToCallback: true, usernameField: "email" },
+
       async (req, username, password, done) => {
         try {
           const { first_name, last_name, email, age, role } = req.body;
-          const user = await userDao.getByEmail(username);
+
+          const user = await userRepository.getByEmail(username);
           if (user) return done(null, false, { message: "El usuario ya existe" });
+
+          const cart = await cartsRepository.create();
 
           const newUser = {
             first_name,
@@ -40,9 +45,10 @@ const initializePassport = () => {
             age,
             password: createHash(password),
             role,
+            cart: cart._id
           };
 
-          const createUser = await userDao.create(newUser);
+          const createUser = await userRepository.create(newUser);
           return done(null, createUser);
         } catch (error) {
           return done(error);
@@ -55,11 +61,10 @@ const initializePassport = () => {
     "login",
     new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
       try {
-        const user = await userDao.getByEmail(username);
-        if (!user || !isValidPassword(user, password)) return done(null, false, { message: "email o password inválidos" });
-
-        // Si están bien los datos del usuario
+        const user = await userRepository.getByEmail(username);
+        if (!user || !isValidPassword(user, password)) return done(null, false, { message: "Email o password inválidos" });
         return done(null, user);
+
       } catch (error) {
         done(error);
       }
@@ -113,12 +118,13 @@ const initializePassport = () => {
     )
   );
 
+  // Serialización y deserialización de usuarios
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
 
   passport.deserializeUser(async (id, done) => {
-    const user = await userDao.getById(id);
+    const user = await userRepository.getById(id);
     done(null, user);
   });
 };
