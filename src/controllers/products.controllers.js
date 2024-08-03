@@ -1,3 +1,4 @@
+import { generateProductsMocks } from "../mocks/products.mock.js";
 import productsServices from "../services/products.services.js";
 
 const getAll = async (req, res) => {
@@ -85,10 +86,16 @@ const deleteOne = async (req, res) => {
   }
 };
 
+const createProductsMocks = async (req, res) => {
+  const products = generateProductsMocks(10);
+  return res.status(200).json({ status: "ok", products });
+};
+
 export default {
   getAll,
   getById,
   update,
   deleteOne,
   create,
+  createProductsMocks,
 };
