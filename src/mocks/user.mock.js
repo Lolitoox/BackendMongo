@@ -1,4 +1,5 @@
 import { fakerES as faker } from "@faker-js/faker";
+import { userModel } from "../persistences/mongo/models/user.model.js";
 
 export const generateUsersMocks = (amount) => {
   const users = [];
@@ -14,6 +15,8 @@ export const generateUsersMocks = (amount) => {
 
     users.push(user);
   }
+
+  userModel.insertMany(users);
 
   return users;
 };

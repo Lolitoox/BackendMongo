@@ -1,5 +1,5 @@
-import { generateProductsMocks } from "../mocks/products.mock.js";
 import productsServices from "../services/products.services.js";
+import { logger } from "../utils/logger.js";
 
 const getAll = async (req, res) => {
   try {
@@ -32,17 +32,13 @@ const getAll = async (req, res) => {
   }
 };
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   try {
     const { pid } = req.params;
-
     const product = await productsServices.getById(pid);
-    if (!product) return res.status(404).json({ status: "Error", msg: `Producto con el id ${pid} no encontrado` });
-
     res.status(200).json({ status: "success", payload: product });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ status: "Error", msg: "Error interno del servidor" });
+    next(error);
   }
 };
 
@@ -86,16 +82,10 @@ const deleteOne = async (req, res) => {
   }
 };
 
-const createProductsMocks = async (req, res) => {
-  const products = generateProductsMocks(10);
-  return res.status(200).json({ status: "ok", products });
-};
-
 export default {
   getAll,
   getById,
   update,
   deleteOne,
   create,
-  createProductsMocks,
 };

@@ -1,0 +1,4 @@
+2024-08-07 15:12:23 error: [GET] /api/products/id:
+2024-08-07 15:16:02 error: [GET] /api/products/id:
+2024-08-07 15:19:08 error: Cast to ObjectId failed for value "663ecfac" (type string) at path "_id" for model "products"
+2024-08-07 15:27:16 error: [GET] /api/products/id:
