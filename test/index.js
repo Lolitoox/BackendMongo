@@ -17,7 +17,7 @@ const suma = (...nums) => {
     testsPasados++;
   } else {
     console.log(`Test 1 fallado, se recibió: ${resultTest1}, se esperaba: null`);
-  }
+  };
   
   //La función suma debe devolver 0 si no se le pasa ningún parámetro
   console.log("Test 2: La función suma debe devolver 0 si no se le pasa ningún parámetro");
@@ -28,7 +28,7 @@ const suma = (...nums) => {
     testsPasados++;
   } else {
     console.log(`Test 2 fallado, se recibió: ${resultTest2}, se esperaba: 0`);
-  }
+  };
   
   //La función suma debe poder sumar dos números correctamente
   console.log("Test 3: La función suma debe poder sumar dos números correctamente");
@@ -40,7 +40,7 @@ const suma = (...nums) => {
     testsPasados++;
   } else {
     console.log(`Test 3 fallado, se recibió: ${resultTest3}, se esperaba: 15`);
-  }
+  };
   
   //La función suma debe poder sumar debe poder hacer la suma de varios números
   console.log("Test 4: La función suma debe poder sumar debe poder hacer la suma de varios números");
@@ -52,7 +52,7 @@ const suma = (...nums) => {
     testsPasados++;
   } else {
     console.log(`Test 4 fallado, se recibió: ${resultTest4}, se esperaba: 22`);
-  }
+  };
   
   console.log("");
   // Verificación si pasaron todos los test
@@ -60,7 +60,7 @@ const suma = (...nums) => {
     console.log("Todos los test pasaron");
   } else {
     console.log(`Tests pasado ${testsPasados} de 4`);
-  }
+  };
   
   console.log("");
-  console.log("Find de los test");
+  console.log("Fin de los test");

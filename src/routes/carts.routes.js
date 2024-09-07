@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import { authorization, passportCall } from "../middlewares/passport.middleware.js";
 import { checkProductAndCart } from "../middlewares/checkProductAndCart.middleware.js";
 import cartsControllers from "../controllers/carts.controllers.js";

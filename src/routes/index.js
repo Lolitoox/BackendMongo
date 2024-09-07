@@ -3,6 +3,7 @@ import cartsRouters from "./carts.routes.js";
 import productsRouters from "./products.routes.js";
 import sessionRouters from "./session.routes.js";
 import userRouters from "./user.routes.js";
+
 const router = Router();
 
 router.use("/products", productsRouters);

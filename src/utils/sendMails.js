@@ -13,7 +13,7 @@ export const sendMail = async (email, subject, message, template) => {
   });
 
   await transporter.sendMail({
-    from: "profeluismeradev@gmail.com",
+    from: "guidobasano@gmail.com",
     to: email,
     subject,
     text: message,
