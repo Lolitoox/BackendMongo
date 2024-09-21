@@ -18,10 +18,10 @@ const sendEmailResetPassword = async (req, res, next) => {
 const resetPassword = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        
+
         const emailCookie = req.cookies.resetPassword;
-        if(!emailCookie) throw customErrors.badRequestError("Email link expired");
-        
+        if (!emailCookie) throw customErrors.badRequestError("Email link expired");
+
         await userServices.resetPassword(email, password);
 
         res.status(200).json({ status: "ok", message: "Password updated" });
@@ -40,6 +40,18 @@ const changeUserRole = async (req, res, next) => {
         error.path = "[GET] /api/user/premium/:uid";
         next(error);
     }
-};  
+};
 
-export default { sendEmailResetPassword, resetPassword, changeUserRole };
+const addDocuments = async (req, res, next) => {
+    try {
+        const { uid } = req.params;
+        const files = req.files;
+        const response = await userServices.addDocuments(uid, files);
+        res.status(200).json({ status: "ok", response });
+    } catch (error) {
+        error.path = "[GET] /api/user/:uid/documents";
+        next(error);
+    }
+};
+
+export default { sendEmailResetPassword, resetPassword, changeUserRole, addDocuments };
