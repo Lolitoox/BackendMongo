@@ -1,6 +1,7 @@
 import { productResponseDto } from "../dto/product-response.dto.js";
 import productsRepository from "../persistences/mongo/repositories/products.repository.js";
 import error from "../errors/customErrors.js";
+import { sendMail } from "../utils/sendMails.js";
 
 const getAll = async (query, options) => {
     const products = await productsRepository.getAll(query, options);
@@ -17,7 +18,7 @@ const getById = async (id) => {
 const create = async (data, user) => {
     let productData = data;
     if (user.role === "premium") {
-        productData = { ...data, owner: user._id };
+        productData = { ...data, owner: user.email };
     }
 
     const product = await productsRepository.create(productData);
@@ -31,9 +32,14 @@ const update = async (id, data) => {
 
 const deleteOne = async (id, user) => {
     const productData = await productsRepository.getById(id);
-    if (user.role === "premium" && productData.owner !== user._id) {
+    if (user.role === "premium" && productData.owner !== user.email) {
         throw error.unauthorizedError("User not authorized");
-    }
+    };
+
+    if (user.role === "admin" && productData.owner !== "admin") {
+        await sendMail (productData.owner, "Producto eliminado", `El producto ${productData.title} se eliminó por un administrador.`)
+    };
+
     const product = await productsRepository.deleteOne(id);
     return product;
 };
